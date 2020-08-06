@@ -50,7 +50,7 @@
 #'     km.plot(data = ., stat = "fu.stat", time = "fu.time", arm = "arm", 
 #'             table.loc = "topright", x.scale = 30.44)
 #' 
-km.plot <- function(data, stat, time, arm = "arm", x.lab = "Time (Months)", x.time = NULL, y.lab = "% Event-Free", ref = as.character(levels(data2$arm)[1]), 
+km.plot <- function(data, stat, time, arm = arm, x.lab = "Time (Months)", x.time = NULL, y.lab = "% Event-Free", ref = as.character(levels(data2$arm)[1]), 
                     x.max = max(data2$time), x.by = 12, surv.legend.labs = levels(data2$arm2), table.legend.labs = levels(data2$arm2), 
                     color = RColorBrewer::brewer.pal(8,"Set1"), lty = 1, table.font.size = 9, y.scale = "percent", 
                     one.sided = FALSE, risk.table = TRUE, table.include = TRUE, pval.include = TRUE, pval = NULL, pval.loc = NULL, size = .5,
@@ -58,7 +58,14 @@ km.plot <- function(data, stat, time, arm = "arm", x.lab = "Time (Months)", x.ti
                     surv.order = NULL, surv.legend.title = "Arm: ", legend.font = 9, theme = survminer::theme_survminer(),
                     table.loc = "topright", ...){
   ##Create dataset to work with
-  data2 <- data.frame(time=data[[time]], stat=data[[stat]], arm=factor(data[[arm]]))
+  time <- rlang::enquo(time)
+  stat <- rlang::enquo(stat)
+  arm <- rlang::enquo(arm)
+  
+  data2 <- data %>%
+    dplyr::select(time = !!time, stat = !!stat, arm = !!arm) %>% 
+    dplyr::mutate_at(vars(arm), as.factor)
+  # data2 <- data.frame(time=data[[time]], stat=data[[stat]], arm=factor(data[[arm]]))
   if(is.numeric(x.scale)) 
   {
     data2$time <- data2$time/x.scale
