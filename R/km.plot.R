@@ -22,6 +22,7 @@
 #' @param y.scale Scale for y-axis. Options are "default" (decimals, 0.20) and "percent" (percent, 20\%)
 #' @param one.sided TRUE for one-sided p-value, FALSE for two-sided p-value
 #' @param risk.table Include risk table (TRUE/FALSE)
+#' @param risk.table.height Title for the at risk table below plot
 #' @param table.include Include survival table (TRUE/FALSE)
 #' @param pval.include Include p-value. if TRUE and pval = NULL, logrank p-value from survfit() is included
 #' @param pval User specified p-value. This can be used to specify p-value used if something different than logrank is desired. Can be character or numeric.
@@ -53,8 +54,9 @@
 km.plot <- function(data, stat, time, arm = arm, x.lab = "Time (Months)", x.time = NULL, y.lab = "% Event-Free", ref = as.character(levels(data2$arm)[1]), 
                     x.max = max(data2$time), x.by = 12, surv.legend.labs = levels(data2$arm2), table.legend.labs = levels(data2$arm2), 
                     color = RColorBrewer::brewer.pal(8,"Set1"), lty = 1, table.font.size = 9, y.scale = "percent", 
-                    one.sided = FALSE, risk.table = TRUE, table.include = TRUE, pval.include = TRUE, pval = NULL, pval.loc = NULL, size = .5,
-                    risk.table.height = .175, surv.plot.height = .825, table.x.min = x.max/5, table.x.max = x.max/1.5, x.scale = 1,
+                    one.sided = FALSE, risk.table = TRUE, risk.table.title = "Patients at Risk", table.include = TRUE, 
+                    pval.include = TRUE, pval = NULL, pval.loc = NULL, size = .5, risk.table.height = .175, 
+                    surv.plot.height = .825, table.x.min = x.max/5, table.x.max = x.max/1.5, x.scale = 1,
                     surv.order = NULL, surv.legend.title = "Arm: ", legend.font = 9, theme = survminer::theme_survminer(),
                     table.loc = "topright", ...){
   ##Create dataset to work with
@@ -130,8 +132,8 @@ km.plot <- function(data, stat, time, arm = arm, x.lab = "Time (Months)", x.time
                                    risk.table.col="strata", 
                                    #legend="none", 
                                    legend.title = surv.legend.title,
-                                   legend.labs=surv.legend.labs, 
-                                   risk.table.title="Patients at Risk", 
+                                   legend.labs = surv.legend.labs, 
+                                   risk.table.title = risk.table.title, 
                                    risk.table.height = risk.table.height, 
                                    surv.plot.height = surv.plot.height,
                                    fontsize = 4,
